@@ -20,7 +20,7 @@ export default function Dashboard() {
       <header className="bg-white border-b border-slate-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <img src="/images.jpeg" alt="Cogentsoft" className="h-10" />
+            <img src="/images.jpeg" alt="Cogentsoft" className="h-14" />
             <div className="border-l border-slate-300 pl-4">
               <h1 className="text-xl font-bold text-slate-800">Document Chatbot</h1>
               <p className="text-xs text-slate-500">Powered by Cogentsoft</p>
@@ -70,7 +70,7 @@ export default function Dashboard() {
         </div>
       </main>
 
-      <footer className="bg-white border-t border-slate-200 mt-12">
+      <footer className="bg-white border-t border-slate-200 mt-24">
         <div className="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-slate-500">
           <p>© {new Date().getFullYear()} Cogentsoft. All rights reserved.</p>
         </div>

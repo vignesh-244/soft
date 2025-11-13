@@ -31,7 +31,7 @@ export default function Auth() {
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
             <div className="flex justify-center mb-4">
-              <img src="/images.jpeg" alt="Cogentsoft" className="h-12" />
+              <img src="/images.jpeg" alt="Cogentsoft" className="h-16" />
             </div>
             <h1 className="text-2xl font-bold text-slate-800 mb-2">
               Document Chatbot
@@ -39,12 +39,6 @@ export default function Auth() {
             <p className="text-slate-600">
               {isSignUp ? 'Create your account' : 'Sign in to continue'}
             </p>
-            {!isSignUp && (
-              <div className="text-xs text-slate-500 mt-2 space-y-1">
-                <p>Default credentials: vigneshnarayanan2003@gmail.com / admin</p>
-                <p>Will use demo mode if Supabase is not configured</p>
-              </div>
-            )}
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">

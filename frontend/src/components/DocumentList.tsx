@@ -9,29 +9,7 @@ interface DocumentListProps {
   refreshTrigger: number;
 }
 
-// Mock documents for demo
-const mockDocuments: Document[] = [
-  {
-    id: 'demo-doc-1',
-    user_id: 'demo-user-id',
-    title: 'Sample Document',
-    content: 'This is a sample document for testing the chatbot. It contains information about various topics including technology, programming, and artificial intelligence. The document discusses how AI can help with document analysis and question answering. You can ask questions about this document and the AI will provide intelligent responses based on its content.',
-    file_type: 'text/plain',
-    file_size: 512,
-    upload_date: new Date().toISOString(),
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: 'demo-doc-2',
-    user_id: 'demo-user-id',
-    title: 'AI Technology Overview',
-    content: 'Artificial Intelligence (AI) refers to the simulation of human intelligence in machines that are programmed to think like humans and mimic their actions. AI has become an essential part of the technology industry and is used in various applications including natural language processing, computer vision, robotics, and machine learning. The field has evolved rapidly with advancements in deep learning and neural networks.',
-    file_type: 'text/plain',
-    file_size: 387,
-    upload_date: new Date().toISOString(),
-    created_at: new Date().toISOString(),
-  },
-];
+
 
 export default function DocumentList({
   onSelectDocument,
@@ -51,14 +29,10 @@ export default function DocumentList({
   const loadDocuments = async () => {
     setLoading(true);
 
-    // Get mock documents
-    let allDocuments = [...mockDocuments];
-
     // Get uploaded documents from localStorage
     const uploadedDocs = JSON.parse(localStorage.getItem('uploaded-documents') || '[]');
-    allDocuments = [...allDocuments, ...uploadedDocs];
 
-    setDocuments(allDocuments);
+    setDocuments(uploadedDocs);
     setLoading(false);
   };
 

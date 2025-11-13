@@ -21,10 +21,14 @@ export default function DocumentUpload({ onUploadComplete }: DocumentUploadProps
     setSuccess('');
 
     try {
-      const content = await file.text();
+      // Read file as ArrayBuffer for binary files like PDFs
+      const arrayBuffer = await file.arrayBuffer();
+      const uint8Array = new Uint8Array(arrayBuffer);
 
-      // Convert content to base64 for backend
-      const base64Content = btoa(unescape(encodeURIComponent(content)));
+      // Convert to base64
+      let binary = '';
+      uint8Array.forEach(byte => binary += String.fromCharCode(byte));
+      const base64Content = btoa(binary);
 
       // Upload to backend API
       const response = await fetch('http://localhost:8000/api/documents', {
@@ -47,13 +51,13 @@ export default function DocumentUpload({ onUploadComplete }: DocumentUploadProps
 
       const uploadedDoc = await response.json();
 
-      // Also store in localStorage for frontend display (with full content)
+      // Also store in localStorage for frontend display
       const localDoc = {
         id: uploadedDoc.id,
         user_id: user.id,
         title: file.name,
-        content: content, // Keep original content for local display
-        file_type: file.type || 'text/plain',
+        content: base64Content, // Store base64 content for local display/fallback
+        file_type: file.type || 'application/pdf',
         file_size: file.size,
         upload_date: uploadedDoc.upload_date,
         created_at: uploadedDoc.created_at,

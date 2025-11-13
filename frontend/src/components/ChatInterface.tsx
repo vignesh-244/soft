@@ -165,6 +165,65 @@ export default function ChatInterface({ selectedDocument }: ChatInterfaceProps) 
     setLoading(false);
   };
 
+  const formatResponse = (text: string) => {
+    // Split by lines and process each line
+    const lines = text.split('\n');
+    const elements: JSX.Element[] = [];
+    let currentList: JSX.Element[] = [];
+    let inList = false;
+
+    const flushList = () => {
+      if (currentList.length > 0) {
+        elements.push(
+          <ul key={`list-${elements.length}`} className="list-disc list-inside space-y-1 mb-2">
+            {currentList}
+          </ul>
+        );
+        currentList = [];
+        inList = false;
+      }
+    };
+
+    lines.forEach((line, index) => {
+      const trimmedLine = line.trim();
+
+      // Check for bullet points (lines starting with - or * followed by spaces)
+      if (trimmedLine.startsWith('- ') || trimmedLine.match(/^\*\s+/)) {
+        if (!inList) {
+          flushList();
+          inList = true;
+        }
+        const content = trimmedLine.replace(/^[-*]\s+/, '');
+        // Process bold text within bullet points
+        const processedContent = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        currentList.push(
+          <li key={`item-${index}`} dangerouslySetInnerHTML={{ __html: processedContent }} />
+        );
+      }
+      // Check for numbered lists (lines starting with number.)
+      else if (/^\d+\.\s/.test(trimmedLine)) {
+        // For now, treat numbered lists as regular paragraphs
+        flushList();
+        const content = trimmedLine.replace(/^\d+\.\s/, '');
+        const processedContent = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        elements.push(
+          <p key={index} className="mb-2" dangerouslySetInnerHTML={{ __html: processedContent }} />
+        );
+      }
+      // Regular paragraphs with bold text
+      else if (trimmedLine) {
+        flushList();
+        const processedContent = trimmedLine.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        elements.push(
+          <p key={index} className="mb-2" dangerouslySetInnerHTML={{ __html: processedContent }} />
+        );
+      }
+    });
+
+    flushList();
+    return elements;
+  };
+
   const generateResponse = (question: string, doc: Document): string => {
     const content = doc.content.toLowerCase();
     const query = question.toLowerCase();
@@ -184,11 +243,11 @@ export default function ChatInterface({ selectedDocument }: ChatInterfaceProps) 
       return `The document contains approximately ${words} words and ${lines} lines.`;
     }
 
-    const sentences = content.split(/[.!?]+/).filter((s) => s.trim().length > 0);
+    const sentences = content.split(/[.!?]+/).filter((s: string) => s.trim().length > 0);
     const relevantSentences = sentences
-      .filter((sentence) => {
-        const words = query.split(' ').filter((w) => w.length > 3);
-        return words.some((word) => sentence.includes(word));
+      .filter((sentence: string) => {
+        const words = query.split(' ').filter((w: string) => w.length > 3);
+        return words.some((word: string) => sentence.includes(word));
       })
       .slice(0, 2);
 
@@ -259,7 +318,13 @@ export default function ChatInterface({ selectedDocument }: ChatInterfaceProps) 
                   : 'bg-slate-100 text-slate-800'
               }`}
             >
-              <p className="text-sm leading-relaxed">{message.content}</p>
+              {message.role === 'user' ? (
+                <p className="text-sm leading-relaxed">{message.content}</p>
+              ) : (
+                <div className="text-sm leading-relaxed prose prose-sm max-w-none">
+                  {formatResponse(message.content)}
+                </div>
+              )}
             </div>
             {message.role === 'user' && (
               <div className="p-2 bg-slate-700 rounded-lg h-fit">
