@@ -7,10 +7,6 @@
     {
       "source": "/api/(.*)",
       "destination": "/api/$1"
-    },
-    {
-      "source": "/(.*\\.(jpeg|jpg|png|svg|gif|ico|webp))",
-      "destination": "/$1"
     }
   ],
   "headers": [
