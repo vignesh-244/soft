@@ -274,3 +274,4 @@ Thumbs.db
 *.db
 *.sqlite3
 chroma_db/
+.vercel

@@ -31,7 +31,8 @@ export default function DocumentUpload({ onUploadComplete }: DocumentUploadProps
       const base64Content = btoa(binary);
 
       // Upload to backend API
-      const response = await fetch('http://localhost:8000/api/documents', {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiBaseUrl}/api/documents`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

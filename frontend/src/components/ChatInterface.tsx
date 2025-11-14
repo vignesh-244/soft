@@ -43,7 +43,8 @@ export default function ChatInterface({ selectedDocument }: ChatInterfaceProps) 
   const loadMessages = async (sessionId: string) => {
     try {
       // Try to load from backend API
-      const response = await fetch(`http://localhost:8000/api/messages/${sessionId}`);
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiBaseUrl}/api/messages/${sessionId}`);
       if (response.ok) {
         const data = await response.json();
         setMessages(data);
@@ -70,7 +71,8 @@ export default function ChatInterface({ selectedDocument }: ChatInterfaceProps) 
 
     // Try to fetch from backend
     try {
-      const response = await fetch(`http://localhost:8000/api/documents/${docId}`);
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiBaseUrl}/api/documents/${docId}`);
       if (response.ok) {
         const docData = await response.json();
         return docData.content;
@@ -107,7 +109,8 @@ export default function ChatInterface({ selectedDocument }: ChatInterfaceProps) 
       const docContent = await getDocumentContent(selectedDocument.id);
 
       // Call backend API for chat response
-      const response = await fetch('http://localhost:8000/api/chat', {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiBaseUrl}/api/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

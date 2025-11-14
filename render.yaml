@@ -11,4 +11,4 @@ services:
       - key: HOST
         value: 0.0.0.0
       - key: CORS_ORIGINS
-        value: https://soft-lyywh8e2l-vignesh244s-projects.vercel.app
+        value: https://soft-n5rrhb1qc-vignesh244s-projects.vercel.app
